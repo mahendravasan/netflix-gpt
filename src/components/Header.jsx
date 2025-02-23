@@ -10,7 +10,6 @@ const Header = () => {
             <svg
               viewBox="0 0 111 30"
               version="1.1"
-              ariaHidden="true"
               role="img"
               className="w-[148px] h-[40px] fill-[#e50914]"
             >

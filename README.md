@@ -3,7 +3,10 @@
 - Creagte react app using vite
 - Configured tailwind css
 - Header
+- Routing
 - login form
+- Signup form
+- Form Validations
 
 # Features
 

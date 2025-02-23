@@ -1,10 +1,22 @@
-import React, { useEffect, useState } from "react"
-import { images } from "../utils/utils"
-import Header from "./Header"
+import React, { useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 
+// all utilities here...
+import { images } from "../utils/utils"
+import { checkValidData } from "../utils/validate"
+
+// all components here...
+import Header from "./Header"
+
 const Login = () => {
+  // all states here...
   const [isSingIn, setIsSingIn] = useState(true)
+  const [errorMessage,setErrorMessage] = useState(null)
+
+  const email = useRef(null)
+  const password = useRef(null)
+
+  // all functions here...
   useEffect(() => {
     Shery.imageEffect("#back", {
       style: 4,
@@ -47,6 +59,11 @@ const Login = () => {
   const handleToggleSignIn = () => {
     setIsSingIn(!isSingIn)
   }
+
+  const handleButtonClick = () => {
+    const message = checkValidData(email.current.value,password.current.value)
+    setErrorMessage(message)
+  }
   return (
     <>
       <Header />
@@ -65,31 +82,39 @@ const Login = () => {
         </div>
         <div className="login-form absolute w-[80%] xl:w-[450px] bg-[rgba(0,0,0,0.7)] rounded-[6px] xl:p-16 p-6 top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] z-[9999] text-white">
           <h1 className="text-4xl font-semibold mb-8">{isSingIn ? "Sign In" : "Sign Up"}</h1>
-          <form action="">
+          <form action="" onSubmit={(e)=>{e.preventDefault()}}>
             {!isSingIn && (
               <div className="form-control my-4 w-full">
                 <input
                   type="text"
                   placeholder="Full name"
                   className="h-14 p-4 bg-[rgba(0,0,0,0.6)] border-1 border-gray-400 w-full rounded-[4px] focus-visible:border-[#e50914] focus:border-[#e50914] focus:outline-0 transition-all ease-in"
+                  required
                 />
               </div>
             )}
             <div className="form-control my-4 w-full">
               <input
+                ref={email}
                 type="text"
                 placeholder="Email address"
                 className="h-14 p-4 bg-[rgba(0,0,0,0.6)] border-1 border-gray-400 w-full rounded-[4px] focus-visible:border-[#e50914] focus:border-[#e50914] focus:outline-0 transition-all ease-in"
+                required
               />
             </div>
             <div className="form-control my-4 w-full">
               <input
+                ref={password}
                 type="password"
                 placeholder="Password"
                 className="h-14 p-4 bg-[rgba(0,0,0,0.6)] border-1 border-gray-400 w-full rounded-[4px] focus-visible:border-[#e50914] focus:border-[#e50914] focus:outline-0 transition-all ease-in"
+                required
               />
             </div>
-            <button className="w-full bg-[#e50914] h-10 text-center rounded-[4px] cursor-pointer hover:bg-red-700 transition-all ease-in font-medium">
+            {errorMessage &&<p className="text-red-500 font-semibold text-[12px] my-3">{errorMessage}</p>}
+            <button className="w-full bg-[#e50914] h-10 text-center rounded-[4px] cursor-pointer hover:bg-red-700 transition-all ease-in font-medium" 
+            onClick={handleButtonClick}
+            >
               {isSingIn ? "Sign In" : "Sign Up"}
             </button>
           </form>
