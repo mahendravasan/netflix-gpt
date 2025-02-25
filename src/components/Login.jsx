@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 
 // all utilities here...
 import { images } from "../utils/utils"
 import { checkValidData } from "../utils/validate"
+import { auth } from "../utils/firebase"
 
 // all components here...
 import Header from "./Header"
@@ -63,6 +65,34 @@ const Login = () => {
   const handleButtonClick = () => {
     const message = checkValidData(email.current.value, password.current.value)
     setErrorMessage(message)
+    if (message) return
+
+    // Sign in or Sign up logic here...
+    if (!isSingIn) {
+      // Sign up logic here...
+      createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+        .then((userCredential) => {
+          const user = userCredential.user
+          console.log("🚀 ~ .then ~ user:", user)
+        })
+        .catch((error) => {
+          const errorCode = error.code
+          const errorMessage = error.message
+          setErrorMessage(`Error: ${errorCode} - ${errorMessage}`)
+        })
+    } else {
+      // Sign in logic here...
+      signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+        .then((userCredential) => {
+          const user = userCredential.user
+          console.log("🚀 ~ .then ~ user:", user)
+        })
+        .catch((error) => {
+          const errorCode = error.code
+          const errorMessage = error.message
+          setErrorMessage(`Email or password is incorrect. Please try again.`)
+        })
+    }
   }
   return (
     <>
@@ -93,7 +123,7 @@ const Login = () => {
                 <input
                   type="text"
                   placeholder="Full name"
-                  autocomplete="username"
+                  autoComplete="username"
                   className="h-14 p-4 bg-[rgba(0,0,0,0.6)] border-1 border-gray-400 w-full rounded-[4px] focus-visible:border-[#e50914] focus:border-[#e50914] focus:outline-0 transition-all ease-in"
                 />
               </div>
@@ -103,7 +133,7 @@ const Login = () => {
                 ref={email}
                 type="text"
                 placeholder="Email address"
-                autocomplete="username"
+                autoComplete="username"
                 className="h-14 p-4 bg-[rgba(0,0,0,0.6)] border-1 border-gray-400 w-full rounded-[4px] focus-visible:border-[#e50914] focus:border-[#e50914] focus:outline-0 transition-all ease-in"
               />
             </div>
@@ -112,7 +142,7 @@ const Login = () => {
                 ref={password}
                 type="password"
                 placeholder="Password"
-                autocomplete="current-password"
+                autoComplete="current-password"
                 className="h-14 p-4 bg-[rgba(0,0,0,0.6)] border-1 border-gray-400 w-full rounded-[4px] focus-visible:border-[#e50914] focus:border-[#e50914] focus:outline-0 transition-all ease-in"
               />
             </div>
