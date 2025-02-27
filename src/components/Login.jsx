@@ -1,20 +1,35 @@
 import React, { useEffect, useRef, useState } from "react"
-import { Link } from "react-router-dom"
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
+import { Link, useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile
+} from "firebase/auth"
 
 // all utilities here...
 import { images } from "../utils/utils"
 import { checkValidData } from "../utils/validate"
 import { auth } from "../utils/firebase"
+import { addUser } from "../utils/userSlice"
 
 // all components here...
 import Header from "./Header"
+
+// all images here...
+import userAvatar from "../assets/images/user-avatar.jpg"
 
 const Login = () => {
   // all states here...
   const [isSingIn, setIsSingIn] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
 
+  // all hooks here...
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  // all refs here...
+  const name = useRef(null)
   const email = useRef(null)
   const password = useRef(null)
 
@@ -73,7 +88,22 @@ const Login = () => {
       createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
         .then((userCredential) => {
           const user = userCredential.user
-          console.log("🚀 ~ .then ~ user:", user)
+          updateProfile(user, {
+            displayName: name.current.value,
+            photoURL: userAvatar
+          })
+            .then(() => {
+              const { uid, email, displayName, photoURL } = auth.currentUser
+              dispatch(
+                addUser({ uid: uid, email: email, displayName: displayName, photoURL: photoURL })
+              )
+              localStorage.setItem("user", JSON.stringify(auth.currentUser))
+              navigate("/browse")
+            })
+            .catch((error) => {
+              // An error occurred
+              // ...
+            })
         })
         .catch((error) => {
           const errorCode = error.code
@@ -85,7 +115,9 @@ const Login = () => {
       signInWithEmailAndPassword(auth, email.current.value, password.current.value)
         .then((userCredential) => {
           const user = userCredential.user
-          console.log("🚀 ~ .then ~ user:", user)
+
+          localStorage.setItem("user", JSON.stringify(user))
+          navigate("/browse")
         })
         .catch((error) => {
           const errorCode = error.code
@@ -94,6 +126,7 @@ const Login = () => {
         })
     }
   }
+
   return (
     <>
       <Header />
@@ -121,6 +154,7 @@ const Login = () => {
             {!isSingIn && (
               <div className="form-control my-4 w-full">
                 <input
+                  ref={name}
                   type="text"
                   placeholder="Full name"
                   autoComplete="username"

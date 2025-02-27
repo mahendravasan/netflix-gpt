@@ -9,6 +9,10 @@
 - Form Validations
 - Firebase Setup
 - Deploying app in production using firebase deploy
+- Create Signup user account
+- Implement Sign in use API
+- Created redux store with userSlice
+- Signout functionality
 
 # Features
 

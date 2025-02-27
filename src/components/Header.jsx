@@ -1,10 +1,30 @@
-import React from "react"
-import { Link } from "react-router-dom"
+import React, { use } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { signOut } from "firebase/auth"
+import { auth } from "../utils/firebase"
+import { useDispatch, useSelector } from "react-redux"
+import { removeUser } from "../utils/userSlice"
 
 const Header = () => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const user = useSelector((state) => state.user)
+  console.log("🚀 ~ Header ~ user:", user)
+
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        dispatch(removeUser())
+        localStorage.removeItem("user")
+        navigate("/")
+      })
+      .catch((error) => {
+        console.log("🚀 ~ signOut ~ error:", error)
+      })
+  }
   return (
     <div className="header-main fixed z-[9999] w-full flex items-center bg-gradient-to-b from-black py-8">
-      <div className="container mx-auto xl:w-[1140px] w-[90%]">
+      <div className="container mx-auto xl:w-[1140px] w-[90%] flex justify-between items-center">
         <Link to={"/"}>
           <div className="logo cursor-pointer">
             <svg
@@ -19,6 +39,32 @@ const Header = () => {
             </svg>
           </div>
         </Link>
+        {user && (
+          <div className="flex items-center gap-4">
+            <div className="user-name text-[15px] text-white font-semibold">
+              {user?.displayName}
+            </div>
+            <div className="user-icon cursor-pointer">
+              <img src={user?.photoURL} alt="user" className="w-8 h-8 rounded-[4px]" />
+            </div>
+            <div
+              className="relative inline-block text-left cursor-pointer"
+              onClick={() => handleSignOut()}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path
+                  fill="none"
+                  stroke="#fff"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M6 6.5C4.159 8.148 3 10.334 3 13a9 9 0 1 0 18 0c0-2.666-1.159-4.852-3-6.5M12 2v9m0-9c-.7 0-2.008 1.994-2.5 2.5M12 2c.7 0 2.008 1.994 2.5 2.5"
+                  color="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
