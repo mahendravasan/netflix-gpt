@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import {
   createUserWithEmailAndPassword,
@@ -25,7 +25,6 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState(null)
 
   // all hooks here...
-  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   // all refs here...
@@ -98,7 +97,6 @@ const Login = () => {
                 addUser({ uid: uid, email: email, displayName: displayName, photoURL: photoURL })
               )
               localStorage.setItem("user", JSON.stringify(auth.currentUser))
-              navigate("/browse")
             })
             .catch((error) => {
               // An error occurred
@@ -117,7 +115,6 @@ const Login = () => {
           const user = userCredential.user
 
           localStorage.setItem("user", JSON.stringify(user))
-          navigate("/browse")
         })
         .catch((error) => {
           const errorCode = error.code

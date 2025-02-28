@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { signOut } from "firebase/auth"
+import { onAuthStateChanged, signOut } from "firebase/auth"
 import { auth } from "../utils/firebase"
 import { useDispatch, useSelector } from "react-redux"
-import { removeUser } from "../utils/userSlice"
+import { addUser, removeUser } from "../utils/userSlice"
 
 const Header = () => {
   const navigate = useNavigate()
@@ -12,7 +12,6 @@ const Header = () => {
   const dropdown = useRef(null)
 
   const [showDropdown, setShowDropdown] = useState(false)
-  console.log("🚀 ~ Header ~ user:", user)
 
   const handleSignOut = () => {
     signOut(auth)
@@ -43,6 +42,19 @@ const Header = () => {
       setShowDropdown(false)
     }
   }
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const { uid, email, displayName, photoURL } = user
+        dispatch(addUser({ uid: uid, email: email, displayName: displayName, photoURL: photoURL }))
+        navigate("/browse")
+      } else {
+        dispatch(removeUser())
+        navigate("/")
+      }
+    })
+  }, [])
   return (
     <div className="header-main fixed z-[9999] w-full flex items-center bg-gradient-to-b from-black py-8">
       <div className="container mx-auto xl:w-[1140px] w-[90%] flex justify-between items-center">
