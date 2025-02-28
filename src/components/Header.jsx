@@ -1,4 +1,4 @@
-import React, { use } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { signOut } from "firebase/auth"
 import { auth } from "../utils/firebase"
@@ -9,6 +9,9 @@ const Header = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const user = useSelector((state) => state.user)
+  const dropdown = useRef(null)
+
+  const [showDropdown, setShowDropdown] = useState(false)
   console.log("🚀 ~ Header ~ user:", user)
 
   const handleSignOut = () => {
@@ -21,6 +24,24 @@ const Header = () => {
       .catch((error) => {
         console.log("🚀 ~ signOut ~ error:", error)
       })
+  }
+
+  const handleDropdown = () => {
+    setShowDropdown(!showDropdown)
+  }
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside)
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside)
+    }
+  }, [])
+
+  const handleClickOutside = (event) => {
+    if (dropdown.current && !dropdown.current.contains(event.target)) {
+      setShowDropdown(false)
+    }
   }
   return (
     <div className="header-main fixed z-[9999] w-full flex items-center bg-gradient-to-b from-black py-8">
@@ -44,24 +65,30 @@ const Header = () => {
             <div className="user-name text-[15px] text-white font-semibold">
               {user?.displayName}
             </div>
-            <div className="user-icon cursor-pointer">
-              <img src={user?.photoURL} alt="user" className="w-8 h-8 rounded-[4px]" />
-            </div>
             <div
-              className="relative inline-block text-left cursor-pointer"
-              onClick={() => handleSignOut()}
+              ref={dropdown}
+              className="flex items-center gap-3 cursor-pointer relative"
+              onClick={() => handleDropdown()}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path
-                  fill="none"
-                  stroke="#fff"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  d="M6 6.5C4.159 8.148 3 10.334 3 13a9 9 0 1 0 18 0c0-2.666-1.159-4.852-3-6.5M12 2v9m0-9c-.7 0-2.008 1.994-2.5 2.5M12 2c.7 0 2.008 1.994 2.5 2.5"
-                  color="currentColor"
-                />
-              </svg>
+              <div className="user-icon">
+                <img src={user?.photoURL} alt="user" className="w-8 h-8 rounded-[4px]" />
+              </div>
+              <div className="relative inline-block text-left">
+                <svg width="15" height="15" viewBox="0 0 512 512">
+                  <path
+                    fill="#fff"
+                    d="m98 190.06l139.78 163.12a24 24 0 0 0 36.44 0L414 190.06c13.34-15.57 2.28-39.62-18.22-39.62h-279.6c-20.5 0-31.56 24.05-18.18 39.62"
+                  />
+                </svg>
+              </div>
+              {showDropdown && (
+                <div
+                  onClick={() => handleSignOut()}
+                  className="dropdown text-[#333] px-1 py-1 bg-white text-[14px] rounded-[4px] absolute top-9 w-[100px] text-center hover:bg-[#f2f2f2] cursor-pointer"
+                >
+                  Signout
+                </div>
+              )}
             </div>
           </div>
         )}
