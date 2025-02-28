@@ -6,13 +6,17 @@ import { useDispatch, useSelector } from "react-redux"
 import { addUser, removeUser } from "../utils/userSlice"
 
 const Header = () => {
+  // all hooks here...
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const user = useSelector((state) => state.user)
   const dropdown = useRef(null)
+  const user = useSelector((state) => state.user)
 
+  // all states here...
   const [showDropdown, setShowDropdown] = useState(false)
+  console.log("🚀 ~ Header ~ user:", user)
 
+  // all functions here...
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {
@@ -44,7 +48,7 @@ const Header = () => {
   }
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         const { uid, email, displayName, photoURL } = user
         dispatch(addUser({ uid: uid, email: email, displayName: displayName, photoURL: photoURL }))
@@ -54,6 +58,7 @@ const Header = () => {
         navigate("/")
       }
     })
+    return () => unsubscribe()
   }, [])
   return (
     <div className="header-main fixed z-[9999] w-full flex items-center bg-gradient-to-b from-black py-8">
