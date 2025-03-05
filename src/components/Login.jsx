@@ -99,8 +99,7 @@ const Login = () => {
               localStorage.setItem("user", JSON.stringify(auth.currentUser))
             })
             .catch((error) => {
-              // An error occurred
-              // ...
+              console.log("🚀 ~ .then ~ error:", error)
             })
         })
         .catch((error) => {

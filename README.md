@@ -13,7 +13,11 @@
 - Implement Sign in use API
 - Created redux store with userSlice
 - Implement signout functionality
-<!-- - Fetch movies from TMDB -->
+- Registered for TMDB API & get access token
+- Fetch now playing movies data from TMDB API
+- Created custom hook for now playing movies
+- Fetch Trailer video from TMDB Movies videos API
+- Integrate Video background componet on browse page
 
 # Features
 

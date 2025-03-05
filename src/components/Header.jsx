@@ -14,7 +14,6 @@ const Header = () => {
 
   // all states here...
   const [showDropdown, setShowDropdown] = useState(false)
-  console.log("🚀 ~ Header ~ user:", user)
 
   // all functions here...
   const handleSignOut = () => {
@@ -55,6 +54,7 @@ const Header = () => {
         navigate("/browse")
       } else {
         dispatch(removeUser())
+        localStorage.removeItem("user")
         navigate("/")
       }
     })
@@ -99,11 +99,33 @@ const Header = () => {
                 </svg>
               </div>
               {showDropdown && (
-                <div
-                  onClick={() => handleSignOut()}
-                  className="dropdown text-[#333] px-1 py-1 bg-white text-[14px] rounded-[4px] absolute top-9 w-[100px] text-center hover:bg-[#f2f2f2] cursor-pointer"
-                >
-                  Signout
+                <div className="dropdown text-white px-1 py-1 bg-black text-[14px] rounded-[4px] absolute top-9 w-[150px] text-center cursor-pointer">
+                  <ul className="w-full">
+                    <li className="w-full flex items-center gap-3 px-2 py-2">
+                      <svg width="16" viewBox="0 0 448 512" className="me-1">
+                        <path
+                          fill="#fff"
+                          d="M304 128a80 80 0 1 0-160 0a80 80 0 1 0 160 0m-208 0a128 128 0 1 1 256 0a128 128 0 1 1-256 0M49.3 464h349.5c-8.9-63.3-63.3-112-129-112h-91.4c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304h91.4c98.5 0 178.3 79.8 178.3 178.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3"
+                        />
+                      </svg>
+                      About
+                    </li>
+                    <li className="w-full flex items-center gap-3 px-2 py-2 mb-2">
+                      <svg width="20" viewBox="0 0 24 24">
+                        <path
+                          fill="#fff"
+                          d="M11.95 18q.525 0 .888-.363t.362-.887t-.362-.888t-.888-.362t-.887.363t-.363.887t.363.888t.887.362m-.9-3.85h1.85q0-.825.188-1.3t1.062-1.3q.65-.65 1.025-1.238T15.55 8.9q0-1.4-1.025-2.15T12.1 6q-1.425 0-2.312.75T8.55 8.55l1.65.65q.125-.45.563-.975T12.1 7.7q.8 0 1.2.438t.4.962q0 .5-.3.938t-.75.812q-1.1.975-1.35 1.475t-.25 1.825M12 22q-2.075 0-3.9-.787t-3.175-2.138T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8"
+                        />
+                      </svg>
+                      Help
+                    </li>
+                    <li
+                      className="w-full flex items-center justify-center gap-3 p-2 text-center border-t border-[#333]"
+                      onClick={() => handleSignOut()}
+                    >
+                      Signout
+                    </li>
+                  </ul>
                 </div>
               )}
             </div>
