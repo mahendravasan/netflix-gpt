@@ -3,8 +3,8 @@ import React from "react"
 const VideoTitle = (props) => {
   const { title, description } = props
   return (
-    <div className="absolute w-full h-screen bg-gradient-to-r from-black flex">
-      <div className="container mx-auto xl:w-[1140px] w-[90%] mt-auto mb-40">
+    <div className="absolute w-full h-screen bg-gradient-to-r from-black flex z-10">
+      <div className="container mx-auto xl:w-[1540px] w-[90%] mt-auto mb-70">
         <div className="content w-full">
           <h1 className="text-6xl font-bold text-white">{title}</h1>
           <p className="w-1/2 my-8 text-white">{description}</p>
@@ -27,9 +27,9 @@ const VideoTitle = (props) => {
                 <path
                   className="group-hover:fill-black"
                   fill="#fff"
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2s10 4.477 10 10M11 8a1 1 0 0 0 1 1h.008a1 1 0 1 0 0-2H12a1 1 0 0 0-1 1m1 9a1 1 0 0 0 1-1v-5a1 1 0 1 0-2 0v5a1 1 0 0 0 1 1"
-                  clip-rule="evenodd"
+                  clipRule="evenodd"
                 />
               </svg>
               More info

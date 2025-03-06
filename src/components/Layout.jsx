@@ -16,7 +16,7 @@ const Layout = () => {
   ])
 
   return (
-    <div className="body">
+    <div className="body bg-[#00050d]">
       <RouterProvider router={appRouter} />
     </div>
   )

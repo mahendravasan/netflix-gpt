@@ -62,7 +62,7 @@ const Header = () => {
   }, [])
   return (
     <div className="header-main fixed z-[9999] w-full flex items-center bg-gradient-to-b from-black py-8">
-      <div className="container mx-auto xl:w-[1140px] w-[90%] flex justify-between items-center">
+      <div className="container mx-auto xl:w-[1540px] w-[90%] flex justify-between items-center">
         <Link to={"/"}>
           <div className="logo cursor-pointer">
             <svg

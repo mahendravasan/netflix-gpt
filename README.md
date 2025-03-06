@@ -17,7 +17,7 @@
 - Fetch now playing movies data from TMDB API
 - Created custom hook for now playing movies
 - Fetch Trailer video from TMDB Movies videos API
-- Integrate Video background componet on browse page
+- Integrate Video background component on browse page
 
 # Features
 
